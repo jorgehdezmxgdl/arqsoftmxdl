@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-   version="6.0">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>Procesa</servlet-name>
+        <servlet-class>mx.gdl.unedl.apazonweb.servlet.Procesa</servlet-class>
+        <init-param>
+            <param-name>clave</param-name>
+            <param-value>""</param-value>
+        </init-param>
+        <init-param>
+            <param-name>passwd</param-name>
+            <param-value>""</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Procesa</servlet-name>
+        <url-pattern>/inicia_sesion</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
