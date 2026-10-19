@@ -3,10 +3,11 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     </head>
     <body>
         <h1>Apazon Web</h1>
-        <form name="forma01" method="post" action="inicia_sesion">
+        <form name="forma01" id="forma01" method="post" action="inicia_sesion">
             <table>
                 <thead>
                     <tr>
@@ -16,21 +17,38 @@
                 <tbody>
                     <tr>
                         <td>Clave</td>
-                        <td><input type="text" name="clave" placeholder="Ej. admin"
+                        <td><input type="text" id="clave" name="clave" placeholder="Ej. admin"
                                    /></td>
                     </tr>
                     <tr>
                         <td>Contraseña</td>
-                        <td><input type="password" name="passw" placeholder="tu clave"
+                        <td><input type="password" id="passw" name="passw" placeholder="tu clave"
                                    /></td>  
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <input type="submit" value="Ingresar" />
+                            <input type="submit" id="btnSubmit" value="Ingresar" />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
+        <script>
+            $(document).ready(function () {
+                $("#btnSubmit").click(function(e){
+                    e.preventDefault();
+                    const clave = $("#clave").val();
+                    const passw = $("#passw").val();
+                    if (!clave) {
+                        alert("Ingresa la clave");
+                        return;
+                    }else if (!passw) {
+                        alert("Ingresa la contraseña");
+                        return ;
+                    }
+                    $("#forma01" ).trigger("submit" );
+                }); 
+            });
+        </script>
     </body>
 </html>

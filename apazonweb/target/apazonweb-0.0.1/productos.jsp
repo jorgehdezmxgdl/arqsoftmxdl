@@ -25,16 +25,20 @@
                 <%
                     DbManager dbm = new DbManager();
                     List<Producto> listado = dbm.getListado();
+                    int contador = 0;
                     for (Producto p : listado) {
+                        contador += 1;
                         %>
                         <tr>
+                            <td><%= contador %></td> 
                             <%
                                 List<Imagen> imagen = p.getListado();
                                 for (Imagen m: imagen) {
                             %>
                              <td><img src  ="<%= m.getUrl()  %>" 
                                      width ="<%= m.getAncho() %>" 
-                                     height="<%= m.getLargo() %>" 
+                                     height="<%= m.getLargo() %>"
+                                     alt="Producto"
                                     /></td>
                             <% 
                                 } 

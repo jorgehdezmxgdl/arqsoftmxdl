@@ -17,7 +17,7 @@ import mx.gdl.unedl.apazonweb.model.Producto;
  */
 public class DbManager {
     private String url     = "jdbc:mysql://localhost:3306/"
-            + "apazondb?autoReconnect=true&useSSL=false&serverTimezone=UTC";
+            + "apazondb?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false&serverTimezone=UTC";
     private String usuario = "root";
     private String passwd  = "12345";
     
