@@ -15,16 +15,30 @@
             $(document).ready(function () {
                 $("#btnProducto").click(function () {
                     $.ajax({
-                        url: "productos.jsp",
+                        url: "procesa.jsp",
                         cache: false,
-                        beforeSend: function() {
-                           $("#resultado").html("<img src='img/loading.gif' width='40px' height='40px' alt='Espere...' />");  
+                        beforeSend: function () {
+                            $("#resultado").html("<img src='img/loading.gif' width='40px' height='40px' alt='Espere...' />");
                         },
                         success: function (result) {
-                          setTimeout(function() {
-                            $("#resultado").empty(); 
-                            $("#resultado").html(result);   
-                          }, 500);   
+                            const resultado = result;
+                            const resp = typeof result === 'string' ? JSON.parse(result) : result;
+                            if (Array.isArray(resp)) {
+                                let salida = "<table><tbody>";
+                                let contador = 0;
+                                resp.forEach(p => {
+                                    contador += 1;
+                                    salida += "<tr>";
+                                    salida += `<td>${contador}</td>`;
+                                    salida += `<td>${p.nombre}</td>`;
+                                    salida += `<td>${p.descripcion}</td>`;
+                                    salida += `<td>${p.precio}</td>`;
+                                    salida += "</tr>";
+
+                                });
+                                salida += "</tbody></table>";
+                                $("#resultado").html(salida);
+                            }
                         }
                     });
                 });

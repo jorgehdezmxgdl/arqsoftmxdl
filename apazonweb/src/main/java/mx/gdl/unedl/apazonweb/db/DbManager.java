@@ -55,15 +55,19 @@ public class DbManager {
         return valido; 
     }
     
-    public List<Producto> getListado() {
+    public List<Producto> getListado(String dato) {
         List<Producto> listado = new ArrayList();
         Connection   cp        = this.getConnection();
         if (cp != null) {
             try {
                 Statement st = cp.createStatement();
-                ResultSet rs = st.executeQuery("SELECT p.nombre, p.descripcion, p.precio, " +
+                String sql   = "SELECT p.nombre, p.descripcion, p.precio, " +
 "                         i.nombre_imagen, i.ancho, i.largo FROM productos p INNER JOIN " +
-"                         prod_imagenes i ON i.productos_id = p.id ORDER BY p.nombre");
+"                         prod_imagenes i ON i.productos_id = p.id ";
+                sql += dato != null ? " WHERE p.nombre like '%"+ dato +"%'" : " ";
+                sql += " order by p.nombre";
+                System.out.println(sql);
+                ResultSet rs = st.executeQuery(sql);
                 List<Imagen> misImagenes = new ArrayList<>();
                 while (rs.next()) {
                     misImagenes.add(new Imagen(rs.getString(4), rs.getInt(5), 
