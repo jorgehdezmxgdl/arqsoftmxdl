@@ -1,54 +1,667 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <h1>Apazon Web</h1>
-        <form name="forma01" id="forma01" method="post" action="inicia_sesion">
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Completa la siguiente información</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Clave</td>
-                        <td><input type="text" id="clave" name="clave" placeholder="Ej. admin"
-                                   /></td>
-                    </tr>
-                    <tr>
-                        <td>Contraseña</td>
-                        <td><input type="password" id="passw" name="passw" placeholder="tu clave"
-                                   /></td>  
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <input type="submit" id="btnSubmit" value="Ingresar" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-        <script>
-            $(document).ready(function () {
-                $("#btnSubmit").click(function(e){
-                    e.preventDefault();
-                    const clave = $("#clave").val();
-                    const passw = $("#passw").val();
-                    if (!clave) {
-                        alert("Ingresa la clave");
-                        return;
-                    }else if (!passw) {
-                        alert("Ingresa la contraseña");
-                        return ;
-                    }
-                    $("#forma01" ).trigger("submit" );
-                }); 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apazon Web | Acceso</title>
+    <meta
+        name="description"
+        content="Acceso seguro a Apazon Web"
+    >
+
+    <!-- jQuery -->
+    <script
+        src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+        crossorigin="anonymous">
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        /* ==============================
+           FUTURISTIC DESIGN SYSTEM
+        ============================== */
+
+        :root {
+            --neon-purple: #8b5cf6;
+            --neon-cyan: #06b6d4;
+            --dark-bg: #050816;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(6, 182, 212, 0.15),
+                    transparent 30%
+                ),
+                #050816;
+        }
+
+        /* Grid futurista del fondo */
+        .cyber-grid {
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+        }
+
+        /* Glow ambiental */
+        .ambient-glow {
+            filter: blur(80px);
+            opacity: 0.35;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        /* Línea luminosa superior */
+        .top-line {
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #8b5cf6,
+                #06b6d4,
+                transparent
+            );
+        }
+
+        /* Glow del botón */
+        .neon-button {
+            box-shadow:
+                0 0 0 rgba(139,92,246,0),
+                0 0 25px rgba(139,92,246,0.25);
+        }
+
+        .neon-button:hover {
+            box-shadow:
+                0 0 30px rgba(139,92,246,0.35),
+                0 0 60px rgba(6,182,212,0.15);
+        }
+
+        /* Inputs */
+        .cyber-input {
+            background: rgba(2, 6, 23, 0.65);
+            border: 1px solid rgba(148,163,184,0.18);
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .cyber-input:hover {
+            border-color: rgba(148,163,184,0.35);
+        }
+
+        .cyber-input:focus {
+            background: rgba(2, 6, 23, 0.9);
+            border-color: rgba(139,92,246,0.8);
+            box-shadow:
+                0 0 0 3px rgba(139,92,246,0.10),
+                0 0 25px rgba(139,92,246,0.10);
+        }
+
+        .cyber-input::placeholder {
+            color: #64748b;
+        }
+
+        /* Animación de entrada */
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .card-enter {
+            animation: cardEnter 0.7s ease-out both;
+        }
+
+        /* Pulso del indicador */
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+
+        .pulse-dot {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 999px;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white cyber-grid">
+
+    <!-- Elementos decorativos -->
+    <div
+        class="ambient-glow pointer-events-none fixed -left-32 -top-32 h-96 w-96 rounded-full bg-violet-600"
+        aria-hidden="true">
+    </div>
+
+    <div
+        class="ambient-glow pointer-events-none fixed -bottom-32 -right-32 h-96 w-96 rounded-full bg-cyan-500"
+        aria-hidden="true">
+    </div>
+
+
+    <!-- Contenedor principal -->
+    <main class="relative flex min-h-screen items-center justify-center px-4 py-10">
+
+        <section
+            class="card-enter glass relative w-full max-w-md overflow-hidden rounded-3xl"
+            aria-labelledby="login-title"
+        >
+
+            <!-- Línea superior -->
+            <div
+                class="top-line absolute left-0 right-0 top-0 h-px"
+                aria-hidden="true">
+            </div>
+
+
+            <!-- Header -->
+            <header class="px-8 pb-4 pt-9 text-center sm:px-10">
+
+                <!-- Logo -->
+                <div class="mb-6 flex justify-center">
+
+                    <div
+                        class="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-500/20 to-cyan-500/10 shadow-lg shadow-violet-500/10"
+                        aria-hidden="true"
+                    >
+
+                        <div
+                            class="absolute inset-0 rounded-2xl bg-violet-500/10 blur-xl">
+                        </div>
+
+                        <svg
+                            class="relative h-8 w-8 text-violet-300"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            aria-hidden="true"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-1.4 1.4-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21h-2v-.1a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06-1.4-1.4.06-.06A1.65 1.65 0 0 0 9.6 15a1.65 1.65 0 0 0-1.51-1H8v-2h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06 1.4-1.4.06.06a1.65 1.65 0 0 0 1.82.33h.01A1.65 1.65 0 0 0 13.5 6.6V6h2v.6a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 1.4 1.4-.06.06A1.65 1.65 0 0 0 19.4 11a1.65 1.65 0 0 0 1.51 1H21v2h-.09a1.65 1.65 0 0 0-1.51 1Z"
+                            />
+                        </svg>
+                    </div>
+                </div>
+
+
+                <p class="mb-2 text-xs font-semibold uppercase tracking-[0.35em] text-cyan-400">
+                    Sistema seguro
+                </p>
+
+                <h1
+                    id="login-title"
+                    class="text-3xl font-bold tracking-tight text-white"
+                >
+                    Apazon Web
+                </h1>
+
+                <p class="mt-3 text-sm leading-6 text-slate-400">
+                    Accede al sistema utilizando tus credenciales.
+                </p>
+
+            </header>
+
+
+            <!-- Formulario -->
+            <form
+                name="forma01"
+                id="forma01"
+                method="post"
+                action="inicia_sesion"
+                class="px-8 pb-9 pt-5 sm:px-10"
+                novalidate
+            >
+
+                <!-- Error general -->
+                <div
+                    id="formError"
+                    class="mb-5 hidden rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <!-- Clave -->
+                <div class="mb-5">
+
+                    <label
+                        for="clave"
+                        class="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                        Clave
+                    </label>
+
+                    <div class="relative">
+
+                        <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500"
+                            aria-hidden="true"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
+                                />
+                            </svg>
+                        </div>
+
+                        <input
+                            type="text"
+                            id="clave"
+                            name="clave"
+                            autocomplete="username"
+                            placeholder="Ej. admin"
+                            class="cyber-input w-full rounded-xl px-4 py-3.5 pl-12 text-sm text-white outline-none"
+                        >
+
+                    </div>
+
+                    <p
+                        id="claveError"
+                        class="mt-2 hidden text-xs text-red-400"
+                    ></p>
+
+                </div>
+
+
+                <!-- Contraseña -->
+                <div class="mb-6">
+
+                    <label
+                        for="passw"
+                        class="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                        Contraseña
+                    </label>
+
+                    <div class="relative">
+
+                        <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500"
+                            aria-hidden="true"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                            >
+                                <rect
+                                    x="5"
+                                    y="10"
+                                    width="14"
+                                    height="10"
+                                    rx="2"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    d="M8 10V7a4 4 0 0 1 8 0v3"
+                                />
+                            </svg>
+                        </div>
+
+                        <input
+                            type="password"
+                            id="passw"
+                            name="passw"
+                            autocomplete="current-password"
+                            placeholder="Ingresa tu contraseña"
+                            class="cyber-input w-full rounded-xl px-4 py-3.5 pl-12 pr-12 text-sm text-white outline-none"
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 transition hover:text-violet-300 focus:outline-none focus-visible:text-violet-300"
+                            aria-label="Mostrar contraseña"
+                        >
+                            <svg
+                                id="eyeIcon"
+                                class="h-5 w-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.25 12s3.5-6 9.75-6 9.75 6 9.75 6-3.5 6-9.75 6-9.75-6-9.75-6Z"
+                                />
+                                <circle cx="12" cy="12" r="2.5"/>
+                            </svg>
+                        </button>
+
+                    </div>
+
+                    <p
+                        id="passwError"
+                        class="mt-2 hidden text-xs text-red-400"
+                    ></p>
+
+                </div>
+
+
+                <!-- Botón -->
+                <button
+                    type="submit"
+                    id="btnSubmit"
+                    class="neon-button group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-500 px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-violet-500 hover:to-cyan-400 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+
+                    <span
+                        id="buttonText"
+                        class="relative z-10"
+                    >
+                        Ingresar al sistema
+                    </span>
+
+                    <svg
+                        id="buttonArrow"
+                        class="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 12h14M13 6l6 6-6 6"
+                        />
+                    </svg>
+
+                    <span
+                        id="buttonSpinner"
+                        class="spinner hidden"
+                        aria-hidden="true">
+                    </span>
+
+                </button>
+
+
+                <!-- Estado -->
+                <div class="mt-6 flex items-center justify-center gap-2">
+
+                    <span
+                        class="pulse-dot h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50"
+                        aria-hidden="true">
+                    </span>
+
+                    <span class="text-xs text-slate-500">
+                        Conexión protegida
+                    </span>
+
+                </div>
+
+            </form>
+
+
+            <!-- Footer -->
+            <footer
+                class="border-t border-white/5 bg-black/10 px-8 py-4 text-center"
+            >
+                <p class="text-[11px] tracking-wide text-slate-600">
+                    © 2026 Apazon Web · Acceso autorizado
+                </p>
+            </footer>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        $(document).ready(function () {
+
+            const $form = $("#forma01");
+            const $clave = $("#clave");
+            const $passw = $("#passw");
+            const $formError = $("#formError");
+            const $claveError = $("#claveError");
+            const $passwError = $("#passwError");
+
+            const $button = $("#btnSubmit");
+            const $buttonText = $("#buttonText");
+            const $buttonArrow = $("#buttonArrow");
+            const $buttonSpinner = $("#buttonSpinner");
+
+
+            function clearErrors() {
+                $formError
+                    .addClass("hidden")
+                    .text("");
+
+                $claveError
+                    .addClass("hidden")
+                    .text("");
+
+                $passwError
+                    .addClass("hidden")
+                    .text("");
+
+                $clave.removeAttr("aria-invalid");
+                $passw.removeAttr("aria-invalid");
+            }
+
+
+            function showError(field, message) {
+
+                if (field === "clave") {
+
+                    $claveError
+                        .removeClass("hidden")
+                        .text(message);
+
+                    $clave.attr("aria-invalid", "true");
+
+                    $clave.trigger("focus");
+
+                } else if (field === "passw") {
+
+                    $passwError
+                        .removeClass("hidden")
+                        .text(message);
+
+                    $passw.attr("aria-invalid", "true");
+
+                    $passw.trigger("focus");
+                }
+            }
+
+
+            function setLoading(loading) {
+
+                $button.prop("disabled", loading);
+
+                if (loading) {
+
+                    $buttonText.text("Autenticando...");
+                    $buttonArrow.addClass("hidden");
+                    $buttonSpinner.removeClass("hidden");
+
+                } else {
+
+                    $buttonText.text("Ingresar al sistema");
+                    $buttonArrow.removeClass("hidden");
+                    $buttonSpinner.addClass("hidden");
+                }
+            }
+
+
+            // Mostrar / ocultar contraseña
+            $("#togglePassword").on("click", function () {
+
+                const isPassword =
+                    $passw.attr("type") === "password";
+
+                $passw.attr(
+                    "type",
+                    isPassword ? "text" : "password"
+                );
+
+                $(this).attr(
+                    "aria-label",
+                    isPassword
+                        ? "Ocultar contraseña"
+                        : "Mostrar contraseña"
+                );
             });
-        </script>
-    </body>
+
+
+            // Limpiar errores al escribir
+            $clave.on("input", function () {
+
+                $claveError
+                    .addClass("hidden")
+                    .text("");
+
+                $clave.removeAttr("aria-invalid");
+            });
+
+
+            $passw.on("input", function () {
+
+                $passwError
+                    .addClass("hidden")
+                    .text("");
+
+                $passw.removeAttr("aria-invalid");
+            });
+
+
+            // Validación y envío
+            $form.on("submit", function (e) {
+
+                clearErrors();
+
+                const clave = $clave.val().trim();
+                const passw = $passw.val().trim();
+
+
+                if (!clave) {
+
+                    e.preventDefault();
+
+                    showError(
+                        "clave",
+                        "Ingresa tu clave para continuar."
+                    );
+
+                    return;
+                }
+
+
+                if (!passw) {
+
+                    e.preventDefault();
+
+                    showError(
+                        "passw",
+                        "Ingresa tu contraseña para continuar."
+                    );
+
+                    return;
+                }
+                setLoading(true);
+            });
+
+
+            // Enter en cualquier campo
+            $form.on("keydown", function (e) {
+
+                if (e.key === "Enter") {
+
+                    const active = document.activeElement;
+
+                    if (
+                        active === $clave[0] ||
+                        active === $passw[0]
+                    ) {
+                        e.preventDefault();
+                        $form.trigger("submit");
+                    }
+                }
+            });
+
+        });
+    </script>
+
+</body>
 </html>
